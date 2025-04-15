@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SilverSHop զարդերի շուկա</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+          background-image: url(background.png);
+          background-repeat: no-repeat;
+          background-size: cover;
+          
+         
+          
+        }
+
+        header {
+            background: #e8dee8;
+            color: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+        }
+
+        header button {
+            background-color: #fff;
+            border: 2px solid #000;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        header button:hover {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .product {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .product:hover {
+            transform: scale(1.03);
+        }
+
+        .product img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .product h3 {
+            margin: 1rem 0 0.5rem;
+        }
+
+        .product p {
+            font-size: 1.1rem;
+            color: #efa2f5;
+            margin-bottom: 1rem;
+        }
+
+        .product button {
+            background-color: #efa2f5;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .product button:hover {
+            background-color: #efa2f5;
+        }
+
+        #cart-modal {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+            transform: translateX(100%);
+            transition: transform 0.4s ease;
+            z-index: 1001;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #cart-modal.active {
+            transform: translateX(0);
+        }
+
+        #close-cart {
+            align-self: flex-end;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        #cart-items {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin: 1rem 0;
+        }
+
+        #cart-items .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        #total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        form input {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        form button {
+            width: 100%;
+            padding: 0.7rem;
+            background: #efa2f5;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        footer {
+            background: #e7cbe7;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid #f5f5f5;
+            font-size: 0.95rem;
+            font-style: initial;
+            
+            }
+        </style>
+</head>
+<body>
+    <header>
+        <h1>SilverSHop</h1>
+        <button id="cart-btn">զամբյուղ (<span id="cart-count">0</span>)</button>
+    </header>
+
+    <section class="products">
+        <div class="product">
+            <img src="ոսկյա սիրտ ականջօղեր.jpg" alt="ոսկյա սիրտ ականջօղեր">
+            <h3>ոսկյա սիրտ ականջօղեր</h3>
+            <p>15000 դր</p>
+            <button onclick="addToCart('ոսկյա սիրտ ականջօղեր', 15000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="սրտաձև ականջօղեր.jpg" alt="սրտաձև ականջօղեր">
+            <h3>սրտաձև ականջօղեր</h3> <br>
+            <p>30000 դր</p>
+            <button onclick="addToCart('սրտաձև ականջօղեր', 30000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="ոսկյա կիսակլոր ականջօղեր.jpg" alt="ոսկյա կիսակլոր ականջօղեր">
+            <h3>ոսկյա կիսակլոր ականջօղեր</h3>
+            <p>25000 դր</p>
+            <button onclick="addToCart('ոսկյա կիսակլոր ականջօղեր', 25000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="գեղեցիկ ականջօղեր.jpg" alt="գեղեցիկ ականջօղեր">
+            <h3>գեղեցիկ ականջօղեր</h3>  <br>
+            <p>25000 դր</p>
+            <button onclick="addToCart('գեղեցիկ ականջօղեր', 25000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="ոսկյա ականջօղեր բանտերի տեսքով.jpg" alt="ոսկյա ականջօղեր բանտերի տեսքով">
+            <h3>ոսկյա ականջօղեր բանտերի տեսքով</h3>
+            <p>80000 դր</p>
+            <button onclick="addToCart('ոսկյա ականջօղեր բանտերի տեսքով', 80000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="խուճուճ ականջօղեր.jpg" alt="խուճուճ ականջօղեր">
+            <h3>խուճուճ ականջօղեր</h3> <br>
+            <p>20000 դր</p>
+            <button onclick="addToCart('խուճուճ ականջօղեր', 20000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="կապած թևնոց.jpg" alt="ոսկյա ապարանջան">
+            <h3>ոսկյա ապարանջան</h3> <br>
+            <p>35000 դր</p>
+            <button onclick="addToCart('ոսկյա ապարանջան', 35000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="թևնոց մեխ.jpg" alt="թևնոց մեխ">
+            <h3>թևնոց մեխ</h3> <br>
+            <p>22000 դր</p>
+            <button onclick="addToCart('թևնոց մեխ', 22000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="թևնոց տերև.jpg" alt="թևնոց տերև">
+            <h3>թևնոց տերև</h3> <br>
+            <p>10000 դր</p>
+            <button onclick="addToCart('թևնոց տերև', 10000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="ոսկյա թևնոց.jpg" alt="ոսկյա թևնոց">
+            <h3>ոսկյա թևնոց</h3> <br>
+            <p>18000 դր</p>
+            <button onclick="addToCart('ոսկյա թևնոց', 18000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="ոսկյա մատանի տերև.jpg" alt="ոսկյա մատանի տերև">
+            <h3>ոսկյա մատանի տերև</h3> <br>
+            <p>25000 դր</p>
+            <button onclick="addToCart('ոսկյա մատանի տերև', 25000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="մատանի կաթիլի տեսքով.jpg" alt="մատանի կաթիլի տեսքով">
+            <h3>մատանի կաթիլի տեսքով</h3>
+            <p>40000 դր</p>
+            <button onclick="addToCart('մատանիի կաթիլի տեսքով', 40000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="արծաթյա թևնոց մարգարիտներով.jpg" alt="արծաթյա թևնոց մարգարիտներով">
+            <h3>արծաթյա թևնոց մարգարիտներով</h3>
+            <p>8000 դր</p>
+            <button onclick="addToCart('արծաթյա թևնոց մարգարիտներով', 8000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="արծաթյա թևնոց սրտիկով.jpg" alt="արծաթյա թևնոց սրտիկով">
+            <h3>արծաթյա թևնոց սրտիկով</h3>
+            <p>9000 դր</p>
+            <button onclick="addToCart('արծաթյա թևնոց սրտիկով', 9000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="svarowski վզնոց.jpg" alt="svarowski վզնոց">
+            <h3>svarowski վզնոց</h3> <br>
+            <p>25000 դր</p>  
+            <button onclick="addToCart('svarowski վզնոց', 25000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="արծաթյա վզնոց սրտեր.jpg" alt="արծաթյա վզնոց սրտեր">
+            <h3>արծաթյա վզնոց սրտեր</h3>
+            <p>15000 դր</p>
+            <button onclick="addToCart('արծաթյա վզնոց սրտեր', 15000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="ոսկյա մատանի շղթա.jpg" alt="ոսկյա մատանի շղթա">
+            <h3>ոսկյա մատանի շղթա</h3> <br>
+            <p>15000 դր</p>
+            <button onclick="addToCart('ոսկյա մատանի շղթա', 15000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="ոսկյա մատանի փշեր.jpg" alt="ոսկյա մատանի փշեր">
+            <h3>ոսկյա մատանի փշեր</h3> <br>
+            <p>25000 դր</p>
+            <button onclick="addToCart('ոսկյա մատանի փշեր', 25000)">զամբյուղ</button>
+        </div>  
+        <div class="product">
+            <img src="անվանատառով մատանի.jpg" alt="անվանատառով մատանի">
+            <h3>անվանատառով մատանի</h3>
+            <p>25000 դր</p>
+            <button onclick="addToCart('անվանատառով մատանի',215000)">զամբյուղ</button>
+        </div> 
+        <div class="product">
+            <img src="Անվանատառերով Վզնոցներ.jpg" alt="Անվանատառերով Վզնոցներ">
+            <h3>Անվանատառերով Վզնոցներ</h3>
+            <p>45000 դր</p>
+            <button onclick="addToCart('Անվանատառերով Վզնոցներ', 45000)">զամբյուղ</button>
+        </div>
+        <div class="product">
+            <img src="ոսկեզօծված վզնոցներ.jpg" alt="ոսկեզօծված վզնոցներ">
+            <h3>ոսկեզօծված վզնոցներ</h3>
+            <p>9000 դր</p>
+            <button onclick="addToCart('ոսկեզօծված վզնոցներ', 9000)">զամբյուղ</button>
+        </div>
+    </section>
+
+        <div id="cart-modal" style="display: none; color: #efa2f5;">
+        <div id="cart-content">
+            <button id="close-cart">X</button>
+            <h2>ձեր զամբյուղը</h2>
+            <div id="cart-items"></div>
+            <div id="total">ընդհանուր: 0 դր</div>
+            <form id="checkout-form">
+                <input type="text" placeholder="անուն" required>
+                <input type="email" placeholder="էլ. հասցե" required>
+                <input type="text" placeholder="առաքման հասցե" required>
+                <form id="checkout-form">
+                <input type="text" name="cardNumber" placeholder="Բանկային քարտի համար (16 թվանշան)" maxlength="16" pattern="\d{16}" required>
+                <input type="text" placeholder="աա/տտ" required pattern="(0[1-9]|1[0-2])\/\d{2}" maxlength="5">
+        <input type="text" placeholder="CVV" required pattern="\d{3}" maxlength="3">
+                    <button type="submit">Պատվիրել</button>
+                </form>
+                
+        </div>
+    </div>
+    <footer>
+        
+        <h2>մեր մասին</h2>
+        <p>SilverSHop-ը ոսկերչական խանութ է, որն առաջարկում է ոսկուց, արծաթից և թանկարժեք քարերից պատրաստված բացառիկ զարդեր: Մենք աշխատում ենք 2005 թվականից՝ երաշխավորելով յուրաքանչյուր ապրանքի որակն ու յուրահատկությունը։</p>
+        <p>կոնտակտներ: info@silvershop.ru | +374 (12) 34-56-78</p>
+        <p>հասցե: ք. Նոյեմբերյան, Շիրազի 17</p>
+    </footer>
+    <div class="overlay" id="overlay"></div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
